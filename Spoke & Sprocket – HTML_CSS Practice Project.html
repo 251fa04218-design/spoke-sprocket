@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- RESPONSIVE: this tag makes phones render at their real width -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spoke &amp; Sprocket — Community Bike Repair</title>
+<style>
+/* ===== 1. CSS VARIABLES: colors, spacing and type defined once ===== */
+:root {
+  --ink: #14213d;
+  --sky: #dcebf3;
+  --sun: #ffc93c;
+  --paper: #ffffff;
+  --muted: #4a5878;
+  --space: clamp(1rem, 4vw, 2.5rem);   /* fluid spacing */
+  --radius: 14px;
+  --font: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ink: #eef3fb; --sky: #101a30; --paper: #1a2745; --muted: #aab6d1; }
+}
+
+/* ===== 2. RESET + BASE TYPOGRAPHY ===== */
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--sky);
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.15; }
+h1 { font-size: clamp(2.2rem, 7vw, 4rem); }   /* clamp(min, fluid, max) */
+h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin-bottom: 1rem; }
+p { max-width: 62ch; }                         /* readable line length */
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+/* shared wrapper: centers content and limits width */
+.wrap { max-width: 68rem; margin-inline: auto; padding-inline: var(--space); }
+section { padding-block: calc(var(--space) * 1.6); }
+
+/* ===== 3. FLEXBOX: header / navigation (one row, spaced apart) ===== */
+.site-header { background: var(--ink); color: #fff; position: sticky; top: 0; z-index: 5; }
+.site-header .wrap {
+  display: flex;                 /* children sit in a row */
+  justify-content: space-between;/* logo left, nav right */
+  align-items: center;           /* vertical centering */
+  flex-wrap: wrap;               /* wrap on narrow screens */
+  gap: .5rem 1.5rem;
+  padding-block: .8rem;
+}
+.logo { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; text-decoration: none; }
+nav ul { display: flex; gap: 1.2rem; list-style: none; padding: 0; }
+nav a { text-decoration: none; padding: .3rem 0; border-bottom: 2px solid transparent; }
+nav a:hover { border-color: var(--sun); }
+
+/* ===== 4. HERO: text + a pure-CSS bicycle wheel ===== */
+.hero .wrap { display: flex; align-items: center; gap: var(--space); flex-wrap: wrap; }
+.hero-text { flex: 1 1 22rem; }          /* grow, shrink, base width */
+.hero-text p { margin: 1rem 0 1.6rem; color: var(--muted); }
+.btn {
+  display: inline-block; background: var(--sun); color: #14213d;
+  padding: .8rem 1.5rem; border-radius: 999px; font-weight: 700; text-decoration: none;
+  transition: transform .15s;
+}
+.btn:hover { transform: translateY(-2px); }
+.wheel {
+  flex: 0 1 15rem; aspect-ratio: 1; border-radius: 50%;
+  border: 14px solid var(--ink);
+  /* repeating-conic-gradient draws the spokes */
+  background: repeating-conic-gradient(var(--ink) 0 1deg, transparent 1deg 15deg);
+  position: relative; margin-inline: auto;
+}
+.wheel::after { content: ""; position: absolute; inset: 40%; background: var(--sun); border: 6px solid var(--ink); border-radius: 50%; }
+
+/* ===== 5. GRID: services (cards that auto-fit the screen) ===== */
+.services { background: var(--paper); }
+.card-grid {
+  display: grid;
+  /* as many 15rem+ columns as fit; 1 column on phones, 3-4 on desktop */
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
+}
+.card { border: 2px solid var(--ink); border-radius: var(--radius); padding: 1.3rem; }
+.card h3 { font-size: 1.25rem; margin-bottom: .4rem; }
+.price { display: inline-block; margin-top: .6rem; background: var(--sun); color: #14213d; padding: .1rem .7rem; border-radius: 999px; font-weight: 700; }
+
+/* ===== 6. GRID: named two-column layout (main + sidebar) ===== */
+.layout { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: start; }
+ol.steps { padding-left: 1.3rem; display: grid; gap: .8rem; }
+aside { background: var(--ink); color: #fff; padding: 1.4rem; border-radius: var(--radius); }
+aside h2 { color: var(--sun); font-size: 1.4rem; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: .45rem 0; border-bottom: 1px solid rgb(255 255 255 / .25); }
+
+/* ===== 7. FORM styling ===== */
+form { display: grid; gap: 1rem; max-width: 30rem; }
+label { display: grid; gap: .3rem; font-weight: 700; }
+input, select, textarea {
+  font: inherit; padding: .7rem; border: 2px solid var(--ink); border-radius: 10px;
+  background: var(--paper); color: var(--ink);
+}
+button.btn { border: 0; cursor: pointer; font: inherit; font-weight: 700; justify-self: start; }
+
+.site-footer { background: var(--ink); color: #fff; text-align: center; padding: 1.5rem var(--space); }
+
+/* ===== 8. RESPONSIVE DESIGN: media query for small screens ===== */
+@media (max-width: 700px) {
+  .layout { grid-template-columns: 1fr; }   /* stack sidebar under main */
+  nav ul { gap: .8rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<!-- SEMANTIC HTML: each tag says what the content IS (header, nav, main, section, article, aside, footer) -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#top">Spoke &amp; Sprocket</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#book">Book a slot</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <h1>Fix your bike. Keep the know-how.</h1>
+        <p>A volunteer-run repair co-op where you work on your own bike with a mechanic beside you. Tools, stands and spare parts are free to use.</p>
+        <a class="btn" href="#book">Book a repair slot</a>
+      </div>
+      <div class="wheel" role="img" aria-label="Illustration of a bicycle wheel"></div>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="wrap">
+      <h2>What we repair</h2>
+      <div class="card-grid">
+        <article class="card"><h3>Flat tyres</h3><p>Patch or replace a tube and learn to do it roadside.</p><span class="price">Free</span></article>
+        <article class="card"><h3>Brakes &amp; gears</h3><p>Adjust cables, pads and derailleurs until shifting is smooth.</p><span class="price">Free + parts</span></article>
+        <article class="card"><h3>Full tune-up</h3><p>A two-hour session covering chain, wheels, bearings and safety checks.</p><span class="price">$10</span></article>
+        <article class="card"><h3>Build from parts</h3><p>Assemble a bike from donated frames and components.</p><span class="price">$40</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap layout">
+      <article>
+        <h2>How a session works</h2>
+        <ol class="steps">
+          <li>Pick a slot and tell us what is wrong.</li>
+          <li>Bring the bike. A mechanic helps you diagnose the problem.</li>
+          <li>You do the repair with guidance, so next time you can do it alone.</li>
+          <li>Test ride, pay what you can for parts, and go.</li>
+        </ol>
+      </article>
+      <aside>
+        <h2>Opening hours</h2>
+        <table>
+          <caption class="sr-only" style="position:absolute;left:-9999px">Weekly opening hours</caption>
+          <tr><th scope="row">Tue</th><td>5 – 8 pm</td></tr>
+          <tr><th scope="row">Thu</th><td>5 – 8 pm</td></tr>
+          <tr><th scope="row">Sat</th><td>10 am – 3 pm</td></tr>
+        </table>
+      </aside>
+    </div>
+  </section>
+
+  <section id="book" class="services">
+    <div class="wrap">
+      <h2>Book a repair slot</h2>
+      <form onsubmit="event.preventDefault(); this.querySelector('output').textContent = 'Thanks! This demo form does not send data yet.';">
+        <label>Your name <input type="text" name="name" required autocomplete="name"></label>
+        <label>Day
+          <select name="day"><option>Tuesday</option><option>Thursday</option><option>Saturday</option></select>
+        </label>
+        <label>What needs fixing? <textarea name="issue" rows="3"></textarea></label>
+        <button class="btn" type="submit">Request slot</button>
+        <output role="status"></output>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Spoke &amp; Sprocket. Fictional co-op, built as an HTML/CSS practice project.</p>
+</footer>
+
+</body>
+</html>
